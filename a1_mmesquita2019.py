@@ -47,6 +47,7 @@ if __name__ == "__main__":
 
     # Building the dictionary. You can look up a city's neighbors and the
     # cost to get there if you know the city's name.
+    # EX: "Bucharest", [("Giurgiu", 90), ("Urziceni", 85)]
     adj_graph: DefaultDict[str,
                            List[Tuple[str, int]]] = defaultdict(list)
 
