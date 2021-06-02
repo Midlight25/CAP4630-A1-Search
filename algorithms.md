@@ -29,3 +29,5 @@ Moving down the search tree, one level at a time. Must cover all nodes in a give
 - You'll have to implement this one with a queue.
 - You'll also probably need some kind of node Data Structure, or a way to record how you got to this specific node that you can
   traverse backwards to report the path of each data structure.
+
+## Depth-First Search
