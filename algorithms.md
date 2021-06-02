@@ -17,11 +17,11 @@ Moving down the search tree, one level at a time. Must cover all nodes in a give
 5. If "current node" is goal, GOTO 9
 6. Get list of neighbors from the current node.
 7. If neighbor is not in visited points list
-   a. Set neighbor's parent as current node
-   b. Enqueue neighbor node.
+   1. Set neighbor's parent as current node
+   2. Enqueue neighbor node.
 8. If there are no more neighbors to process, GOTO 4.
 9. Return path to goal traversing through parents of nodes
-   a. Record cost of path at the same time.
+   1. Record cost of path at the same time.
 10. Return "no path found" error message.
 
 ### Notes
