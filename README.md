@@ -1,7 +1,13 @@
 # CAP4630-A1-Search
 Solving optimization problems using search algorithms.
 
+Architect: Michael Mesquita
+
+Developer: Sean Abuhoff
+
 Reporter: Winston White
+
+
 
 Implementations: 
 
