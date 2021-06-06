@@ -6,7 +6,7 @@
 """
 
 # Importing the types needed for type annotation in this project.
-from typing import List, Tuple, DefaultDict
+from typing import Deque, List, Tuple, DefaultDict, Any
 
 # To build the adjacency graph, we will use the defaultdict factory
 # to turn our edges list into a dictionary where every city
@@ -15,7 +15,7 @@ from collections import defaultdict, deque
 
 
 class Node:
-    def __init__(self, name: str, parent: Node):
+    def __init__(self, name: str, parent: Any):
         self.name: str = name
         self.parent: Node = parent
 
@@ -43,9 +43,7 @@ def breadth_first_search(
 
     # This double-ended queue is used to hold all new nodes found during the
     # load-branches phase of the algorithm.
-    queue = deque()
-
-
+    queue: Deque[str] = deque()
 
 
 if __name__ == "__main__":
