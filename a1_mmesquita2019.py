@@ -14,7 +14,7 @@ from typing import Deque, List, Tuple, DefaultDict, Union
 from collections import defaultdict, deque
 
 # Aliasing the type for the adj_graph, used for functions later.
-Adj_Graph = DefaultDict[str, List[Tuple[str, int]]]
+Adj_Graph = DefaultDict[str, DefaultDict[str, int]]
 
 
 class CityNode:
@@ -74,17 +74,17 @@ def breadth_first_search(start: str, goal: str, graph: Adj_Graph
         if current_node.name == goal:
             return current_node
 
-        # If the current city is not our goal, then we look at it's neighbors
-        # Remember that every destination is a tuple. [name, cost]
+        # If the current city is not our goal, then we look at it's
+        # neighbors
         for destination in graph[current_node.name]:
 
             # Prevent cycles by checking the name of the destination
             # against the names in visited.
-            if destination[0] not in visited:
+            if destination not in visited:
 
                 # Add new destinations to the queue for processing
                 # later.
-                queue.append(CityNode(destination[0], current_node))
+                queue.append(CityNode(destination, current_node))
 
     # If we can't find a path from start to goal, then we return
     # none.
@@ -128,24 +128,24 @@ def depth_first_search(start: str, goal: str, graph: Adj_Graph
         if current_node.name == goal:
             return current_node
 
-        # If the current city is not our goal, then we look at it's neighbors
-        # Remember that every destination is a tuple. [name, cost]
+        # If the current city is not our goal, then we look at it's
+        # neighbors
         for destination in graph[current_node.name]:
 
             # Prevent cycles by checking the name of the destination
             # against the names in visited.
-            if destination[0] not in visited:
+            if destination not in visited:
 
                 # Add new destinations to the stack for processing
                 # later.
-                stack.append(CityNode(destination[0], current_node))
+                stack.append(CityNode(destination, current_node))
 
     # If we can't find a path from start to goal, then we return
     # none.
     return None
 
 
-def compute_path(start_node: CityNode) -> None:
+def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
     """
         Compute Path
         Pre-Condition: Given a valid CityNode instance that has a good link
@@ -153,6 +153,12 @@ def compute_path(start_node: CityNode) -> None:
         Post-Condition: The path from the start-node to the top of
             this reverse linked-list is printed to the console.
     """
+    current_node: CityNode = start_node
+
+    output_string: str = f"[{current_node.name}] -> "
+
+    while current_node.parent is not None:
+        pass
 
 
 if __name__ == "__main__":
@@ -190,7 +196,7 @@ if __name__ == "__main__":
     # Building the dictionary. You can look up a city's neighbors and the
     # cost to get there if you know the city's name.
     # EX: "Bucharest", [("Giurgiu", 90), ("Urziceni", 85)]
-    adj_graph: Adj_Graph = defaultdict(list)
+    adj_graph: Adj_Graph = defaultdict(lambda: defaultdict(int))
 
     # Iterating through each edge and pulling the city names and the path
     # cost.
@@ -198,5 +204,5 @@ if __name__ == "__main__":
 
         # Add this path to the entry in the dictionary for both
         # cities.
-        adj_graph[first_city].append((second_city, cost))
-        adj_graph[second_city].append((first_city, cost))
+        adj_graph[first_city][second_city] = cost
+        adj_graph[second_city][first_city] = cost
