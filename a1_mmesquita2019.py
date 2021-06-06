@@ -219,8 +219,8 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
     if current_node.parent is not None:
 
         # Set up holding variables for the output, we build the output string
-        # using this list. Because we're backtracking, the order of items
-        # needs to be reversed.
+        # using this list. Because we're backtracking, the order of strings
+        # needs to be reversed in the end.
         output_string_list: List[str] = []
         total_cost: int = 0
 
@@ -228,11 +228,14 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
         # list.
         while current_node.parent is not None:
 
-            # Add information to output holders.
-            output_string_list.append(f"[{current_node.name}]")
-            total_cost += graph[current_node.name][current_node.parent.name]
+            # Because the entire expression is too big to fit in the next
+            # three statements.
+            distance = graph[current_node.name][current_node.parent.name]
 
-            # Move to the next node in linked-list.
+            output_string_list.append(f"[{current_node.name}]")
+            output_string_list.append(f"({distance})")
+            total_cost += distance
+
             current_node = current_node.parent
 
         # Add final node to output string. Since we're at the destination
@@ -243,11 +246,9 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
         # together with arrows in between.
         output_string: str = ' -> '.join(reversed(output_string_list))
 
-        # Now we print the output to the console
-        # the path to the destination
         print("Printing path to destination:")
         print(f"\t{output_string}")
-        print(f"The cost of this path is {total_cost} units.")
+        print(f"Total Distance: {total_cost} units.")
 
     # If there is no parent to start_node, then there is no path to
     # compute.
