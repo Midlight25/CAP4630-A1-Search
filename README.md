@@ -27,9 +27,9 @@ EDGES is then iterated through each edge, extracting city names
 and path costs. 
 
 Deque, or double-ended queue, is utitlized to hold all new nodes 
-discovered during the load-branches phase of the BFS algorithm.
+discovered during the load-branches phase of the BFS algorithm. 
 (Double-ended stack is used for DFS algorithm following the same 
-procedure).
+procedure). 
 
 Optional is used to tell the type checker if an object of a specified type is required; otherwise, None is required. 
 
