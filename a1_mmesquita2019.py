@@ -6,7 +6,7 @@
 """
 
 # Importing the types needed for type annotation in this project.
-from typing import Deque, List, Tuple, DefaultDict, Any
+from typing import Deque, List, Tuple, DefaultDict, Union
 
 # To build the adjacency graph, we will use the defaultdict factory
 # to turn our edges list into a dictionary where every city
@@ -14,27 +14,39 @@ from typing import Deque, List, Tuple, DefaultDict, Any
 from collections import defaultdict, deque
 
 
-class Node:
-    def __init__(self, name: str, parent: Any):
+class CityNode:
+    """
+        This class stores instances of cities and where you came from to
+        get to them. There are only two data members: "name" which stores the
+        string name of the city, and "parent" which stores a pointer to the
+        node of the city's 'parent' or where you traversed to get to
+        that city.
+    """
+
+    def __init__(self,
+                 name: str,
+                 parent: Union['CityNode',
+                               None] = None):
         self.name: str = name
-        self.parent: Node = parent
+        self.parent: Union[CityNode, None] = parent
 
 
 def breadth_first_search(
         start: str,
         goal: str,
-        graph: DefaultDict[str, List[Tuple[str, int]]]):
+        graph: DefaultDict[str, List[Tuple[str, int]]]
+) -> Union[CityNode, None]:
     """
         Breadth First Search
         Pre-Condition: The start and goal parameters are strings that contain
             valid city names found in DefaultDict
-        Post-Condition: The first path found from start to goal and
-            the cost of taking that path is printed to the console.
+        Post-Condition: A reverse link-list node is returned with a link
+            to the node that was used to visit that city. If no path
+            between start and goal is found, nothing is returned.
         Description: A path between start and goal is attempted to be found
             using a queue. If a path is found, a node network based on
             what path was taken to reach that node is used to identify
-            a list of parents from goal to start. The cost of that path is
-            also calculated from that node network.
+            a list of parents from goal to start.
     """
 
     # This list will contain the names of all nodes that have already been
@@ -43,7 +55,40 @@ def breadth_first_search(
 
     # This double-ended queue is used to hold all new nodes found during the
     # load-branches phase of the algorithm.
-    queue: Deque[str] = deque()
+    queue: Deque[CityNode] = deque()
+
+    # Create the first node for the starting city and load it into the
+    # queue.
+    queue.append(CityNode(start))
+
+    # As soon as we run out of items in the queue, this loop ends.
+    while queue:
+
+        # Pop the node at the front of the queue. This is the city that
+        # we're now processing.
+        current_node: CityNode = queue.popleft()
+        visited.append(current_node.name)
+
+        # If this city is our goal, then we return this node with all it's
+        # parents
+        if current_node.name == goal:
+            return current_node
+
+        # If the current city is not our goal, then we look at it's neighbors
+        # Remember that every destination is a tuple. [name, cost]
+        for destination in graph[current_node.name]:
+
+            # Prevent cycles by checking the name of the destination
+            # against the names in visited.
+            if destination[0] not in visited:
+
+                # Add new destinations to the queue for processing
+                # later.
+                queue.append(CityNode(destination[0], current_node))
+
+    # If we can't find a path from start to goal, then we return
+    # none.
+    return None
 
 
 if __name__ == "__main__":
@@ -93,4 +138,4 @@ if __name__ == "__main__":
         adj_graph[first_city].append((second_city, cost))
         adj_graph[second_city].append((first_city, cost))
 
-    # Making bad change to code here
+    breadth_first_search("Lugoj", "Oradea", adj_graph)
