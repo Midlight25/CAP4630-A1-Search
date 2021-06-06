@@ -6,7 +6,7 @@
 """
 
 # Importing the types needed for type annotation in this project.
-from typing import Deque, List, Tuple, DefaultDict, Union
+from typing import Deque, List, Tuple, DefaultDict, Optional
 
 # To build the adjacency graph, we will use the defaultdict factory
 # to turn our edges list into a dictionary where every city
@@ -28,14 +28,13 @@ class CityNode:
 
     def __init__(self,
                  name: str,
-                 parent: Union['CityNode',
-                               None] = None):
+                 parent: Optional['CityNode'] = None):
         self.name: str = name
-        self.parent: Union[CityNode, None] = parent
+        self.parent: Optional[CityNode] = parent
 
 
 def breadth_first_search(start: str, goal: str, graph: Adj_Graph
-                         ) -> Union[CityNode, None]:
+                         ) -> Optional[CityNode]:
     """
         Breadth First Search
         Pre-Condition: The start and goal parameters are strings that contain
@@ -92,7 +91,7 @@ def breadth_first_search(start: str, goal: str, graph: Adj_Graph
 
 
 def depth_first_search(start: str, goal: str, graph: Adj_Graph
-                       ) -> Union[CityNode, None]:
+                       ) -> Optional[CityNode]:
     """
         Depth First Search
         Pre-Condition: The start and goal parameters are strings that contain
@@ -153,12 +152,52 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
         Post-Condition: The path from the start-node to the top of
             this reverse linked-list is printed to the console.
     """
+
+    # Load the current node into local memory, so that we can modify this
+    # variable later.
     current_node: CityNode = start_node
 
-    output_string: str = f"[{current_node.name}] -> "
+    # If there is a parent to this node, then we can run the backtracking
+    # code. If this node has no parent, then there is no path to
+    # backtrack.
+    if current_node.parent is not None:
 
-    while current_node.parent is not None:
-        pass
+        # Set up holding variables for the output, we build the output string
+        # using this list. Because we're backtracking, the order of items
+        # needs to be reversed.
+        output_string_list: List[str] = []
+        total_cost: int = 0
+
+        # This will loop and stop at the second to last node in this
+        # list.
+        while current_node.parent is not None:
+
+            # Add information to output holders.
+            output_string_list.append(f"[{current_node.name}]")
+            total_cost += graph[current_node.name][current_node.parent.name]
+
+            # Move to the next node in linked-list.
+            current_node = current_node.parent
+
+        # Add final node to output string. Since we're at the destination
+        # there's no new cost to record.
+        output_string_list.append(f"[{current_node.name}]")
+
+        # Compile output string by reversing the list and joining
+        # together with arrows in between.
+        output_string: str = ' -> '.join(reversed(output_string_list))
+
+        # Now we print the output to the console
+        # the path to the destination
+        print("Printing path to destination:")
+        print(f"\t{output_string}")
+        print(f"The cost of this path is {total_cost} units.")
+
+    # If there is no parent to start_node, then there is no path to
+    # compute.
+    else:
+        print("For this source and destination pair:",
+              "there is no path and no cost, you are already there.")
 
 
 if __name__ == "__main__":
@@ -206,3 +245,11 @@ if __name__ == "__main__":
         # cities.
         adj_graph[first_city][second_city] = cost
         adj_graph[second_city][first_city] = cost
+
+    # Example code of using these functions, please remove in final
+    # product.
+    result_node = breadth_first_search(
+        "Oradea", "Bucharest", adj_graph)
+
+    if result_node is not None:
+        compute_path(result_node, adj_graph)
