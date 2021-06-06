@@ -11,7 +11,42 @@ from typing import List, Tuple, DefaultDict
 # To build the adjacency graph, we will use the defaultdict factory
 # to turn our edges list into a dictionary where every city
 # has it's neighbors and the cost to reach those neighbors.
-from collections import defaultdict
+from collections import defaultdict, deque
+
+
+class Node:
+    def __init__(self, name: str, parent: Node):
+        self.name: str = name
+        self.parent: Node = parent
+
+
+def breadth_first_search(
+        start: str,
+        goal: str,
+        graph: DefaultDict[str, List[Tuple[str, int]]]):
+    """
+        Breadth First Search
+        Pre-Condition: The start and goal parameters are strings that contain
+            valid city names found in DefaultDict
+        Post-Condition: The first path found from start to goal and
+            the cost of taking that path is printed to the console.
+        Description: A path between start and goal is attempted to be found
+            using a queue. If a path is found, a node network based on
+            what path was taken to reach that node is used to identify
+            a list of parents from goal to start. The cost of that path is
+            also calculated from that node network.
+    """
+
+    # This list will contain the names of all nodes that have already been
+    # visited by the function.
+    visited: List[str] = []
+
+    # This double-ended queue is used to hold all new nodes found during the
+    # load-branches phase of the algorithm.
+    queue = deque()
+
+
+
 
 if __name__ == "__main__":
 
