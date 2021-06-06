@@ -13,6 +13,9 @@ from typing import Deque, List, Tuple, DefaultDict, Union
 # has it's neighbors and the cost to reach those neighbors.
 from collections import defaultdict, deque
 
+# Aliasing the type for the adj_graph, used for functions later.
+Adj_Graph = DefaultDict[str, List[Tuple[str, int]]]
+
 
 class CityNode:
     """
@@ -31,11 +34,8 @@ class CityNode:
         self.parent: Union[CityNode, None] = parent
 
 
-def breadth_first_search(
-        start: str,
-        goal: str,
-        graph: DefaultDict[str, List[Tuple[str, int]]]
-) -> Union[CityNode, None]:
+def breadth_first_search(start: str, goal: str, graph: Adj_Graph
+                         ) -> Union[CityNode, None]:
     """
         Breadth First Search
         Pre-Condition: The start and goal parameters are strings that contain
@@ -91,11 +91,8 @@ def breadth_first_search(
     return None
 
 
-def depth_first_search(
-    start: str,
-    goal: str,
-    graph: DefaultDict[str, List[Tuple[str, int]]]
-) -> Union[CityNode, None]:
+def depth_first_search(start: str, goal: str, graph: Adj_Graph
+                       ) -> Union[CityNode, None]:
     """
         Depth First Search
         Pre-Condition: The start and goal parameters are strings that contain
@@ -112,7 +109,7 @@ def depth_first_search(
     # visited by the function.
     visited: List[str] = []
 
-    # This double-ended stack is used to hold all new nodes found during the
+    # This double-queue stack is used to hold all new nodes found during the
     # load-branches phase of the algorithm.
     stack: Deque[CityNode] = deque()
 
@@ -146,6 +143,16 @@ def depth_first_search(
     # If we can't find a path from start to goal, then we return
     # none.
     return None
+
+
+def compute_path(start_node: CityNode) -> None:
+    """
+        Compute Path
+        Pre-Condition: Given a valid CityNode instance that has a good link
+        to another CityNode as it's parent.
+        Post-Condition: The path from the start-node to the top of
+            this reverse linked-list is printed to the console.
+    """
 
 
 if __name__ == "__main__":
@@ -183,8 +190,7 @@ if __name__ == "__main__":
     # Building the dictionary. You can look up a city's neighbors and the
     # cost to get there if you know the city's name.
     # EX: "Bucharest", [("Giurgiu", 90), ("Urziceni", 85)]
-    adj_graph: DefaultDict[str,
-                           List[Tuple[str, int]]] = defaultdict(list)
+    adj_graph: Adj_Graph = defaultdict(list)
 
     # Iterating through each edge and pulling the city names and the path
     # cost.
