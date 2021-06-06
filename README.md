@@ -4,7 +4,7 @@ Solving optimization problems using search algorithms.
 
 Architect: Michael Mesquita
 
-Developer: Sean Abuhoff
+Developer: Sean Abuhoff/Michael Mesquita
 
 Reporter: Winston White
 
@@ -43,3 +43,25 @@ the function returns nothing.
 
 DFS Algorithm:
 Similar procedure as BFS Algorithm; only implementing a stack rather than a queue. 
+
+A* Algorithm:
+Implementing a stack to find the shortest route between two points with
+the fewest number of moves and lowest path costs.
+
+## Who Did What
+
+Michael Mesquita initially worked as the "Developer" until he passed
+that role to Sean; as such, Michael took the role as Architect. Michael's idea
+for this program was to implement a data structure for each algorithm.
+However, once we ran into some issues(such as how to first start implementing
+the program), Michael decided to switch back to Developer and help Sean.
+After some time, they realized that both the BFS and DFS algorithms does not
+utilize path costs, so the implementation for both of those functions did not take
+too long. A*, on the other hand, took quite some time since it does count for path costs.
+Because of this, Michael was the only one to implement the function for that algorithm.
+I, the reporter, was going through each iteration of the programming, detailing
+what each part of the code does. I also provided useful links 
+to my teammates whenever they were stuck on a problem.
+
+
+
