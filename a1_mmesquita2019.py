@@ -144,6 +144,62 @@ def depth_first_search(start: str, goal: str, graph: Adj_Graph
     return None
 
 
+def a_star_search(start: str, goal: str, graph: Adj_Graph
+                  ) -> Optional[CityNode]:
+    """
+        A* Search
+        Pre-Condition: Start and Goal are city names found in graph
+        Post-Condition: If a valid path to the goal from start is found, a
+            node from a reverse linked-list will be returned called CityNode.
+            If no such path is found, then None is returned.
+        Description: Uses the A* algorithm, a stack, and an adjacency graph
+            to return the optimal path between two destinations, both using
+            the least number of moves and the lowest cost/distance.
+    """
+
+    # Storing the names of cities that we've visited already.
+    visited: List[str] = []
+
+    # Making a stack to store cities that we've discovered and the
+    # total distance from "start"
+    stack: Deque[Tuple[CityNode, int]] = deque()
+
+    # Adding the start location with a total distance of zero
+    stack.append((CityNode(start), 0))
+
+    while stack:
+
+        # Get a new city and distance to that city from the stack.
+        # This city should have the lowest distance out of
+        # all the cities yet to be visited.
+        current_node, distance = stack.pop()
+        visited.append(current_node.name)
+
+        if current_node.name == goal:
+            return current_node
+
+        # Select the cities from the neighbors that have
+        # yet to be visited.
+        destinations: List[str] = [destination
+                                   for destination in graph[current_node.name]
+                                   if destination not in visited]
+
+        for destination in destinations:
+
+            # Append the destination to the stack, along with the total
+            # distance to reach it based on the distances
+            # of it's parents
+            stack.append((CityNode(destination, current_node),
+                         graph[current_node.name][destination] + distance))
+
+        # Sort the stack based on total distances, the cities with
+        # the lowest total distances are placed at the top of
+        # the stack to be popped next
+        stack = deque(sorted(stack, key=lambda x: -x[1]))
+
+    return None
+
+
 def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
     """
         Compute Path
@@ -248,8 +304,8 @@ if __name__ == "__main__":
 
     # Example code of using these functions, please remove in final
     # product.
-    result_node = breadth_first_search(
-        "Oradea", "Bucharest", adj_graph)
+    result_node = a_star_search(
+        "Arad", "Craiova", adj_graph)
 
     if result_node is not None:
         compute_path(result_node, adj_graph)
