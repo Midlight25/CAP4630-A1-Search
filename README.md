@@ -77,5 +77,13 @@ I, the reporter, was going through each iteration of the programming, detailing
 what each part of the code does. I also provided useful links 
 to my teammates whenever they were stuck on a problem.
 
+## Contact
 
+Winston White: <whitew2015@fau.edu>
+
+Michael Mesquita: 
+
+Sean Abuhoff:
+
+Project Link: <https://github.com/Midlight25/CAP4630-A1-Search/tree/develop>
 
