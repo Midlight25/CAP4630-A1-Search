@@ -73,17 +73,16 @@ def breadth_first_search(start: str, goal: str, graph: Adj_Graph
         if current_node.name == goal:
             return current_node
 
-        # If the current city is not our goal, then we look at it's
-        # neighbors
-        for destination in graph[current_node.name]:
+        # Select the cities, from the neighbors, that have
+        # yet to be visited.
+        destinations: List[str] = [destination
+                                   for destination in graph[current_node.name]
+                                   if destination not in visited]
 
-            # Prevent cycles by checking the name of the destination
-            # against the names in visited.
-            if destination not in visited:
-
-                # Add new destinations to the queue for processing
-                # later.
-                queue.append(CityNode(destination, current_node))
+        for destination in destinations:
+            # Add new destinations to the queue for processing
+            # later.
+            queue.append(CityNode(destination, current_node))
 
     # If we can't find a path from start to goal, then we return
     # none.
@@ -127,17 +126,18 @@ def depth_first_search(start: str, goal: str, graph: Adj_Graph
         if current_node.name == goal:
             return current_node
 
+        # Select from the neigbors, the cities that have
+        # yet to be visited.
+        destinations: List[str] = [destination
+                                   for destination in graph[current_node.name]
+                                   if destination not in visited]
+
         # If the current city is not our goal, then we look at it's
         # neighbors
-        for destination in graph[current_node.name]:
-
-            # Prevent cycles by checking the name of the destination
-            # against the names in visited.
-            if destination not in visited:
-
-                # Add new destinations to the stack for processing
-                # later.
-                stack.append(CityNode(destination, current_node))
+        for destination in destinations:
+            # Add new destinations to the stack for processing
+            # later.
+            stack.append(CityNode(destination, current_node))
 
     # If we can't find a path from start to goal, then we return
     # none.
@@ -178,7 +178,7 @@ def a_star_search(start: str, goal: str, graph: Adj_Graph
         if current_node.name == goal:
             return current_node
 
-        # Select the cities from the neighbors that have
+        # Select from the neighbors, the cities that have
         # yet to be visited.
         destinations: List[str] = [destination
                                    for destination in graph[current_node.name]
@@ -190,7 +190,7 @@ def a_star_search(start: str, goal: str, graph: Adj_Graph
             # distance to reach it based on the distances
             # of it's parents
             stack.append((CityNode(destination, current_node),
-                         graph[current_node.name][destination] + distance))
+                          graph[current_node.name][destination] + distance))
 
         # Sort the stack based on total distances, the cities with
         # the lowest total distances are placed at the top of
@@ -318,7 +318,7 @@ if __name__ == "__main__":
 
     # Building the dictionary. You can look up a city's neighbors and the
     # cost to get there if you know the city's name.
-    # EX: "Bucharest", [("Giurgiu", 90), ("Urziceni", 85)]
+    # EX: {"Bucharest": {"Giurgiu": 90, "Urziceni": 85}}
     adj_graph: Adj_Graph = defaultdict(lambda: defaultdict(int))
 
     # Iterating through each edge and pulling the city names and the path
@@ -364,13 +364,12 @@ if __name__ == "__main__":
         # Start the CLI for part 2
         pass
 
-    # Default Option for unrecognized input is 1, so doing that for every
+    # Default Option for unrecognized input is #1, so doing that for every
     # other user input besides '2'
     else:
 
         # Instantiating the variables we're using here.
-        # Controls main loop for this part.
-        running: bool = True
+        running: bool = True            # Controls the main loop
         selection_made: bool = False    # Controls input validation loop
         algorithm: str = ""             # User selection for algorithm
         departure: str = ""             # User selection for city parameter
@@ -407,8 +406,7 @@ if __name__ == "__main__":
                 algorithm = algorithm.upper()
                 print()
 
-                if algorithm[0] != 'B' and algorithm[0] != 'D' \
-                        and algorithm != 'A':
+                if algorithm[0] not in ['B', 'D', 'A']:
                     print("I'm sorry, this is not a valid selection.")
                     print(
                         "Please choose from one of the algorithms below:",
@@ -440,7 +438,7 @@ if __name__ == "__main__":
                     selection_made = True
 
             # Perform Breadth-First-Search Algorithm
-            if algorithm[0].upper() == 'B':
+            if algorithm[0] == 'B':
                 print(
                     f'Searching for best path between {departure}',
                     'and Bucharest using "BFS"')
@@ -450,6 +448,7 @@ if __name__ == "__main__":
 
                 if result_node is not None:
                     compute_path(result_node, adj_graph)
+
                 # In the unlikely event that the user has managed to
                 # completely bypass all of my checks against entering
                 # a city that is not in the Adjacency Graph.
@@ -458,7 +457,7 @@ if __name__ == "__main__":
                     print("X>> No Path Found <<X", end='\n\n')
 
             # Perform Depth-First-Search Algorithm
-            elif algorithm[0].upper() == 'D':
+            elif algorithm[0] == 'D':
                 print(
                     f"Searching for best path between {departure}",
                     'and Bucharest using "DFS"')
@@ -468,12 +467,13 @@ if __name__ == "__main__":
 
                 if result_node is not None:
                     compute_path(result_node, adj_graph)
+
                 # Read the comment in BFS
                 else:
                     print("X>> No Path Found <<X", end='\n\n')
 
             # Perform A* Algorithm
-            elif algorithm[0].upper() == 'A':
+            elif algorithm[0] == 'A':
                 print(
                     f"Searching for best path between {departure}",
                     'and Bucharest using "A*"')
@@ -483,6 +483,7 @@ if __name__ == "__main__":
 
                 if result_node is not None:
                     compute_path(result_node, adj_graph)
+
                 # See the comment in BFS
                 else:
                     print("X>> No Path Found <<X", end='\n\n')
