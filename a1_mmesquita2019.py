@@ -246,15 +246,42 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
         # together with arrows in between.
         output_string: str = ' -> '.join(reversed(output_string_list))
 
+        print("!!! Path Found !!!", end='\n\n')
         print("Printing path to destination:")
         print(f"\t{output_string}")
-        print(f"Total Distance: {total_cost} units.")
+        print(f"Total Distance: {total_cost} units.", end='\n\n')
 
     # If there is no parent to start_node, then there is no path to
     # compute.
     else:
+        print("X-- No Path Available --X")
         print("For this source and destination pair:",
               "there is no path and no cost, you are already there.")
+
+
+def print_title() -> None:
+    """
+        Print Title
+        Pre-Condition: Nothing
+        Post-Condition: Nothing
+        Description: Prints a vanity ASCII banner to the console. Because I'm
+            extra like that.
+    """
+    print("   ___           _                          __    ___  ___")
+    print("  / _ | ___ ___ (_)__ ____  __ _  ___ ___  / /_  / _ |<  /")
+    print(
+        " / __ |(_-<(_-</ / _ `/ _ \\/  ' \\/ -_) _ \\/ __/ / __ |/ /")
+    print("/_/ |_/___/___/_/\\_, /_//_/_/_/_/\\__/_//_/\\__/ /_/ |_/_/")
+    print("   ____         /___/   __     ___   __              _ __  __")
+    print(
+        "  / __/__ ___ _________/ /    / _ | / /__ ____  ____(_) /_/ / ",
+        "__ _  ___")
+    print(
+        " _\\ \\/ -_) _ `/ __/ __/ _ \\  / __ |/ / _ `/ _ \\/ __/ / __/",
+        "_ \\/  ' \\(_-<")
+    print("/___/\\__/\\_,_/_/  \\__/_//_/ /_/ |_/_/\\_,",
+          "/\\___/_/ /_/\\__/_//_/_/_/_/___/")
+    print("                                    /___/", end='\n\n\n')
 
 
 if __name__ == "__main__":
@@ -303,10 +330,175 @@ if __name__ == "__main__":
         adj_graph[first_city][second_city] = cost
         adj_graph[second_city][first_city] = cost
 
-    # Example code of using these functions, please remove in final
-    # product.
-    result_node = a_star_search(
-        "Arad", "Craiova", adj_graph)
+    print_title()
 
-    if result_node is not None:
-        compute_path(result_node, adj_graph)
+    # Starting welcoming dialog
+    print("Welcome to the Search Algorithms assignment.",
+          "Where would you like to go first?", end='\n\n')
+
+    # Print Parts Menu
+    print('Part 1: Shortest Route')
+    print(
+        "\tUse three different algorithms to find the shortest distance",
+        "between two cities in a network. Use Breadth-First-Search,",
+        "Depth-First-Search, or A* algorithms to find the most optimal path.",
+        end='\n\n')
+    print("Part 2: Adversarial Search")
+    print(
+        '\tPlay a tic-tac-toe game against a computer opponent using the',
+        'MINMAX algorithm to make decisions about how to play the game.',
+        end='\n\n')
+
+    # Getting user selection on what part to visit.
+    print(
+        "Please select which part you wish to visit: [1] or [2].",
+        "The default option is [1], all unrecognized input will select",
+        "[1] by default.")
+
+    # First user selection on part 1 or part 2
+    user_top_menu: str = input("> ")
+    print("")
+
+    # The non-default option, Part 2: Tic-Tac-Toe game.
+    if user_top_menu[0] == '2':
+        # Start the CLI for part 2
+        pass
+
+    # Default Option for unrecognized input is 1, so doing that for every
+    # other user input besides '2'
+    else:
+
+        # Instantiating the variables we're using here.
+        # Controls main loop for this part.
+        running: bool = True
+        selection_made: bool = False    # Controls input validation loop
+        algorithm: str = ""             # User selection for algorithm
+        departure: str = ""             # User selection for city parameter
+        go_again: str = ""              # User selection for main loop exit
+
+        # Print the user welcome message and instructions once.
+        # Not going to print this every single loop.
+        print('starting part 1...', end='\n\n')
+        print("Part 1: Shortest Route")
+        print(
+            "Given a network map of cities in Romania and the cost",
+            "to move between cities, use an algorithm to find",
+            "the most optimal path between a city of your choice",
+            "and the city of Bucharest.",
+            end='\n\n')
+
+        # Start main control loop.
+        while running:
+            print(
+                "Please select the algorithm that you wish to run:",
+                end='\n\n')
+
+            # Reseting selection_made in case that this is the n+1
+            # loop.
+            selection_made = False
+
+            # Start algorithm selection user input validation loop.
+            while not selection_made:
+                print("[B]: Breadth-First-Search")
+                print("[D]: Depth-First-Search")
+                print("[A]: A* Algorithm Search", end='\n\n')
+
+                algorithm = input("> ")
+                algorithm = algorithm.upper()
+                print()
+
+                if algorithm[0] != 'B' and algorithm[0] != 'D' \
+                        and algorithm != 'A':
+                    print("I'm sorry, this is not a valid selection.")
+                    print(
+                        "Please choose from one of the algorithms below:",
+                        end='\n\n')
+                else:
+                    selection_made = True
+
+            print(
+                "Please type the name of the city of your departure:",
+                end='\n\n')
+
+            # Reset this bool for next user input validation loop
+            selection_made = False
+
+            # Start city-of-departure selection input validation loop.
+            while not selection_made:
+                departure = input("> ")
+                departure = departure.title()
+                print("")
+
+                # Remember that the default iterator on a dictionary is
+                # a List[str] of that dict's keys.
+                if departure not in adj_graph:
+                    print(
+                        f"I'm sorry, but {departure} is not a",
+                        "valid destination.")
+                    print(
+                        "Please type in your destination:",
+                        end='\n\n')
+                else:
+                    selection_made = True
+
+            # Perform Breadth-First-Search Algorithm
+            if algorithm[0].upper() == 'B':
+                print(
+                    f'Searching for best path between {departure}',
+                    'and Bucharest using "BFS"')
+
+                result_node: Optional[CityNode] = breadth_first_search(
+                    departure, "Bucharest", adj_graph)
+
+                if result_node is not None:
+                    compute_path(result_node, adj_graph)
+                # In the unlikely event that the user has managed to
+                # completely bypass all of my checks against entering
+                # a city that is not in the Adjacency Graph.
+                else:
+                    # THIS SHOULD NEVER RUN
+                    print("X>> No Path Found <<X", end='\n\n')
+
+            # Perform Depth-First-Search Algorithm
+            elif algorithm[0].upper() == 'D':
+                print(
+                    f"Searching for best path between {departure}",
+                    'and Bucharest using "DFS"')
+
+                result_node: Optional[CityNode] = depth_first_search(
+                    departure, "Bucharest", adj_graph)
+
+                if result_node is not None:
+                    compute_path(result_node, adj_graph)
+                # Read the comment in BFS
+                else:
+                    print("X>> No Path Found <<X", end='\n\n')
+
+            # Perform A* Algorithm
+            elif algorithm[0].upper() == 'A':
+                print(
+                    f"Searching for best path between {departure}",
+                    'and Bucharest using "A*"')
+
+                result_node: Optional[CityNode] = a_star_search(
+                    departure, "Bucharest", adj_graph)
+
+                if result_node is not None:
+                    compute_path(result_node, adj_graph)
+                # See the comment in BFS
+                else:
+                    print("X>> No Path Found <<X", end='\n\n')
+
+            # Not doing a user validation loop, no is the default
+            # option here.
+            print("Would you like to calculate another route? [y/N]",
+                  "(No is the default option.)")
+
+            go_again = input("> ")
+            print()
+
+            # If an only if a user explicitly asked to go again, does the
+            # loop restart here.
+            if go_again.upper() != 'Y':
+                print("Goodbye!")
+                running = False
