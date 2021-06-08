@@ -254,7 +254,7 @@ def compute_path(start_node: CityNode, graph: Adj_Graph) -> None:
     # If there is no parent to start_node, then there is no path to
     # compute.
     else:
-        print("X-- No Path Available --X")
+        print("X-- No Path Available --X", end='\n\n')
         print("For this source and destination pair:",
               "there is no path and no cost, you are already there.")
 
