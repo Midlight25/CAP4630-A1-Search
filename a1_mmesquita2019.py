@@ -401,7 +401,7 @@ if __name__ == "__main__":
             while not selection_made:
                 print("[B]: Breadth-First-Search")
                 print("[D]: Depth-First-Search")
-                print("[A]: A* Algorithm Search", end='\n\n')
+                print("[A]: A* Algorithm Search")
 
                 algorithm = input("> ")
                 algorithm = algorithm.upper()
@@ -417,8 +417,7 @@ if __name__ == "__main__":
                     selection_made = True
 
             print(
-                "Please type the name of the city of your departure:",
-                end='\n\n')
+                "Please type the name of the city of your departure:")
 
             # Reset this bool for next user input validation loop
             selection_made = False
@@ -436,8 +435,7 @@ if __name__ == "__main__":
                         f"I'm sorry, but {departure} is not a",
                         "valid destination.")
                     print(
-                        "Please type in your destination:",
-                        end='\n\n')
+                        "Please type in your destination:")
                 else:
                     selection_made = True
 
