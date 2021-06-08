@@ -1,5 +1,5 @@
 """
-    Authors: Michael Mesquita,
+    Authors: Michael Mesquita, Sean Abuhoff, Winston White
     Name: A1 Search Strategies
     Date: 31 May 2021
     Course: CAP 4630 - Dr. Marques
